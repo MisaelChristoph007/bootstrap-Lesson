@@ -5,7 +5,7 @@
   <script src="script.js"></script>
   <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ArdiPurworejo - Storee</title>
   <link rel="icon" type="image/png" href="https://images.app.goo.gl/RUw253aYhHuDXF5g9">
@@ -48,35 +48,48 @@
     ['004', 'Mouse Jerry', 30000, 'Mouse yang disukai kucing', '/assets/jerry.jpg']
 ]
 
-            function Cari(keyword) {
-                listBarang.innerHTML = "";
-                for (let i = 0; i < items.length; i++) {
-                    const item = items[i];
-                    if (item[1].toLowerCase().includes(keyword.toLowerCase())) {
-                        const card = document.createElement("div");
-                        card.classList.add("col-4", "mt-2");
-                        card.innerHTML = `
-                            <div class ="col-4 mt-2"> 
-                                <div class="card" style="width: 18rem;">
-                                    <img src="${item[4]}" class="card-img-top" height="200px" width="200px" alt="...">
-                                    <div class="card-body">
-                                        <h5 class="card-title" id="itemName">${item[1]}</h5>
-                                        <p class="card-text" id="itemDesc">${item[3]}</p>
-                                        <p class="card-text">Rp.${item[2]}</p>
-                                        <br>
-                                        <a href="#" class="btn btn-primary add-to-cart" data-id="${item[0]}">Tambahkan ke keranjang</a>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        listBarang.appendChild(card);
-                    }
-                }
-                const btnTambahKeKeranjang = document.querySelectorAll(".add-to-cart");
-                btnTambahKeKeranjang.forEach(button => {
-                    button.addEventListener("click", tambahKeKeranjang);
-                });
-            }
+          function Cari(keyword) {
+              listBarang.innerHTML = "";
+              let hasilPencarian = false; // Tambahkan variabel untuk melacak hasil pencarian
+
+              for (let i = 0; i < items.length; i++) {
+                  const item = items[i];
+                  if (item[1].toLowerCase().includes(keyword.toLowerCase())) {
+                      const card = document.createElement("div");
+                      card.classList.add("col-4", "mt-2");
+                      card.innerHTML = `
+                          <div class ="col-4 mt-2"> 
+                              <div class="card" style="width: 18rem;">
+                                  <img src="${item[4]}" class="card-img-top" height="200px" width="200px" alt="...">
+                                  <div class="card-body">
+                                      <h5 class="card-title" id="itemName">${item[1]}</h5>
+                                      <p class="card-text" id="itemDesc">${item[3]}</p>
+                                      <p class="card-text">Rp.${item[2]}</p>
+                                      <br>
+                                      <a href="#" class="btn btn-primary add-to-cart" data-id="${item[0]}">Tambahkan ke keranjang</a>
+                                  </div>
+                              </div>
+                          </div>
+                      `;
+                      listBarang.appendChild(card);
+                      hasilPencarian = true; // Setel ke true jika ada barang yang cocok
+                  }
+              }
+
+              if (!hasilPencarian) {
+                  // Tampilkan pesan jika hasil pencarian kosong
+                  const pesanBarangTidakTersedia = document.createElement("p");
+                  pesanBarangTidakTersedia.textContent = `Barang "${keyword}" tidak tersedia di toko ini!`;
+                  pesanBarangTidakTersedia.classList.add("text-danger", "no-result-message");
+                  listBarang.appendChild(pesanBarangTidakTersedia);
+              }
+
+              const btnTambahKeKeranjang = document.querySelectorAll(".add-to-cart");
+              btnTambahKeKeranjang.forEach(button => {
+                  button.addEventListener("click", tambahKeKeranjang);
+              });
+          }
+
             // menangani ketika tombol submit diklik
             formItem.addEventListener("submit", function (e) {
                 e.preventDefault();
@@ -178,8 +191,6 @@
               }
           });
       });
-
-      
     </script>
 </body>
 </html>
