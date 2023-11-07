@@ -157,3 +157,48 @@ main {
   font-size: 25px;
   width: 991px;
 }
+
+.add-to-cart {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* CSS untuk menu yang responsif */
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+}
+
+nav li {
+    margin-right: 20px;
+}
+
+/* Media query untuk tampilan layar kecil */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav li {
+        margin: 10px 0;
+    }
+
+    /* Menyembunyikan menu saat layar kecil */
+    nav:not(.show) ul {
+        display: none;
+    }
+}
+
+/* CSS untuk membuat produk responsif */
+.card {
+    width: 100%;
+    max-width: 18rem;
+}
+
+/* Media query untuk produk responsif */
+@media (max-width: 768px) {
+    .col-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
