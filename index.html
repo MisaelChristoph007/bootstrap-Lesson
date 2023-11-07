@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="script.js"></script>
   <link rel="stylesheet" href="style.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,11 +16,12 @@
 <div class="container">
   <nav class="navbar navbar-light bg-light">
     <a class="navbar-brand">ArdiPurworejo Store</a>
-    <form class="form-inline" id="formItem">
+    <form class="form-inline">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" id="keyword" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" id="myInput" onkeyup="myFunction()" type="submit" id="searchItem">Search</button>
+      <button class="btn btn-outline-success my-2 my-sm-0" id="searchButton">Search</button>
     </form>
-    <button class="btn btn-primary" id="cart"><i class="fas fa-shopping-cart"></i><span id="cartItemCount"> (0)</span></button>
+    <button class="btn btn-primary" id="cart" data-toggle="modal" data-target="#cartPopup"><i class="fas fa-shopping-cart"></i><span id="cartItemCount"> (0)</span></button>
+     <button class="btn btn-danger" id="clearCartButton">Clear All</button>
   </nav>
   <div class="row">
     <div class="row col-md-12 mt-2" id="listBarang">
@@ -35,7 +35,7 @@
             <br>
             <p class="card-text">Rp.60.000,00</p>
             <br>
-            <a href="#" data-name="Orange" data-price="0.5" class="add-to-cart btn btn-primary">Add to cart</a>
+            <a href="#" data-name="Keyboard Logitech" data-price="60" class="add-to-cart btn btn-primary">Add to cart</a>
           </div>
         </div>
       </div>
@@ -48,7 +48,7 @@
             <br>
             <p class="card-text">Rp.300.000,00</p>
             <br>
-            <a href="#" data-name="Banana" data-price="1.22" class="add-to-cart btn btn-primary">Add to cart</a>
+            <a href="#" data-name="Keyboard MSI" data-price="300" class="add-to-cart btn btn-primary">Add to cart</a>
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@
             <br>
             <p class="card-text">Rp.50.000,00</p>
             <br>
-            <a href="#" data-name="Lemon" data-price="5" class="add-to-cart btn btn-primary">Add to cart</a>
+            <a href="#" data-name="Mouse Genius" data-price="50" class="add-to-cart btn btn-primary">Add to cart</a>
           </div>
         </div>
       </div>
@@ -70,40 +70,133 @@
           <img class="card-img-top" src="/assets/jerry.jpg" alt="Card image cap">
           <div class="card-block">
             <h4 class="card-title">Mouse Jerry</h4>
-            <p class="card-text">Lorem ipsum dolor sir amet</p>
+            <p class="card-text">Lorem ipsum dolor sit amet</p>
             <br>
             <p class="card-text">Rp.80.000,00</p>
             <br>
-            <a href="#" data-name="Lemon" data-price="5" class="add-to-cart btn btn-primary">Add to cart</a>
+            <a href="#" data-name="Mouse Jerry" data-price="80" class="add-to-cart btn btn-primary">Add to cart</a>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class="modal fade" id="cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+<div class="modal fade" id="cartPopup" tabindex="-1" role="dialog" aria-labelledby="cartPopupLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Cart</h5>
+        <h5 class="modal-title" id="cartPopupLabel">Your Cart</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <table class="show-cart table"></table>
-        <div>Total price: $<span class="total-cart"></span></div>
+        <table class="show-cart-popup table"></table>
+        <div class="total-price-popup">Total: $<span class="total-cart-popup"></span></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Order now</button>
+        <button type="button" class="btn btn-primary" id="orderButton">Order now</button>
+        <button type="button" class="btn btn-danger" id="clearCartButton">Clear Cart</button>
       </div>
     </div>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  integrity="sha384-q8i/X+965dzO0rT7abK41JStQIAqVgRVzpbzo5smXn2x2Bw21" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
   integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
   crossorigin="anonymous"></script>
+<script>
+  const cart = {
+    items: [],
+
+    addItem: function (name, price) {
+      this.items.push({ name, price });
+    },
+
+    getTotalPrice: function () {
+      return this.items.reduce((total, item) => total + item.price, 0);
+    },
+
+    clearCart: function () {
+      this.items = [];
+    },
+  };
+
+  // Function to update the cart and cart modal
+  function updateCart() {
+    const showCartTable = document.querySelector('.show-cart-popup');
+    const totalCartSpan = document.querySelector('.total-cart-popup');
+    showCartTable.innerHTML = '';
+    cart.items.forEach((item) => {
+      showCartTable.innerHTML += `<tr><td>${item.name}</td><td>$${item.price.toFixed(2)}</td></tr>`;
+    });
+    totalCartSpan.textContent = cart.getTotalPrice().toFixed(2);
+    document.getElementById('cartItemCount').textContent = ` (${cart.items.length})`;
+  }
+
+  // Function to update the cart button text
+  function updateCartButton() {
+    const cartItemCount = cart.items.length;
+    const cartButton = document.getElementById('cart');
+    if (cartItemCount > 9) {
+      cartButton.innerHTML = `<i class="fas fa-shopping-cart"></i><span id="cartItemCount"> (9+)</span>`;
+    } else {
+      cartButton.innerHTML = `<i class="fas fa-shopping-cart"></i><span id="cartItemCount"> (${cartItemCount})</span>`;
+    }
+  }
+
+  // Handle the "Order now" button click
+  document.getElementById('orderButton').addEventListener('click', () => {
+    Swal.fire('Order Placed', 'Your order has been placed successfully!', 'success');
+    cart.clearCart();
+    updateCart();
+    updateCartButton();
+    $('#cartPopup').modal('hide');
+  });
+
+  // Search functionality
+  document.getElementById('searchButton').addEventListener('click', (event) => {
+    event.preventDefault();
+    const keyword = document.getElementById('keyword').value.toLowerCase();
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card) => {
+      const title = card.querySelector('.card-title').textContent.toLowerCase();
+      if (title.includes(keyword) || keyword === '') {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+
+  // Handle the "Clear Cart" button click
+  document.getElementById('clearCartButton').addEventListener('click', () => {
+    cart.clearCart();
+    updateCart();
+    updateCartButton();
+    Swal.fire('Keranjang dikosongkan', 'Semua barang sudah dihapus dari keranjang!', 'success');
+  });
+
+  document.querySelectorAll('.add-to-cart').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const name = button.getAttribute('data-name');
+      const price = parseFloat(button.getAttribute('data-price'));
+      cart.addItem(name, price);
+      updateCart();
+      updateCartButton();
+      Swal.fire('Sukses ditambahkan!', `${name} ditambahkan ke keranjang!`, 'success');
+    });
+  });
+
+  // Handle the cart button click to open the cart popup
+  document.getElementById('cart').addEventListener('click', () => {
+    updateCart();
+    $('#cartPopup').modal('show');
+  });
+</script>
 </body>
 </html>

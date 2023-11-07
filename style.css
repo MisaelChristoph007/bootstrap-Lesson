@@ -69,7 +69,7 @@ main {
   border-radius: 10px;
   transition: color 0.15s ease, border-color 0.15s ease;
   max-width: 300px;
-  height: 425px;
+  height: 480px;
 }
 
 .card:hover,
@@ -107,4 +107,47 @@ main {
   width: 200px;
   height: 200px;
   align-self: center;
+}
+
+/* Added animation for add to cart */
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+#addtocart.sendtocart {
+  animation: shake 1s linear;
+}
+
+.navbar {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 0.5rem 11rem;
+}
+
+/* Added new styles for quantity check */
+.add-to-cart.quantity-exceed {
+  background-color: #f8f8f8;
+  color: #888888;
+  cursor: not-allowed;
 }
