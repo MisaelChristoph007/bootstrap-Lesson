@@ -28,7 +28,7 @@
       <!-- Kerjakan dibawah ini! -->
       <div class="col">
         <div class="card" style="width: 20rem;">
-          <img class="card-img top" src="/assets/logitek.jpg">
+          <img class="card-img-top" src="/assets/logitek.jpg">
           <div class="card-block">
             <h4 class="card-title">Keyboard Logitech</h4>
             <p class="card-text">Keyboard yang mantap untuk kantoran</p>
@@ -41,7 +41,7 @@
       </div>
       <div class="col">
         <div class="card" style="width: 20rem;">
-          <img class="card-img top" src="/assets/msi.jpg" alt="Card image cap">
+          <img class="card-img-top" src="/assets/msi.jpg" alt="Card image cap">
           <div class="card-block">
             <h4 class="card-title">Keyboard MSI</h4>
             <p class="card-text">Keyboard MSI Mechanical</p>
@@ -54,7 +54,7 @@
       </div>
       <div class="col">
         <div class="card" style="width: 20rem;">
-          <img class="card-img top" src="/assets/genius.jpeg" alt="Card image cap">
+          <img class="card-img-top" src="/assets/genius.jpeg" alt="Card image cap">
           <div class="card-block">
             <h4 class="card-title">Mouse Genius</h4>
             <p class="card-text">Mouse Genius agar lebih presisi</p>
@@ -67,7 +67,7 @@
       </div>
       <div class="col">
         <div class="card" style="width: 20rem;">
-          <img class="card-img top" src="/assets/jerry.jpg" alt="Card image cap">
+          <img class="card-img-top" src="/assets/jerry.jpg" alt="Card image cap">
           <div class="card-block">
             <h4 class="card-title">Mouse Jerry</h4>
             <p class="card-text">Lorem ipsum dolor sit amet</p>
@@ -125,7 +125,7 @@
     },
   };
 
-  // Function to update the cart and cart modal
+  // Function to update the cart and cart button
   function updateCart() {
     const showCartTable = document.querySelector('.show-cart-popup');
     const totalCartSpan = document.querySelector('.total-cart-popup');
@@ -149,48 +149,25 @@
     }
   }
 
-  // Handle the "Order now" button click
-  document.getElementById('orderButton').addEventListener('click', () => {
-    Swal.fire('Order Placed', 'Your order has been placed successfully!', 'success');
-    cart.clearCart();
+  // Function to handle "Add to Cart" button click
+  function handleAddToCartClick(name, price) {
+    cart.addItem(name, price);
     updateCart();
     updateCartButton();
-    $('#cartPopup').modal('hide');
-  });
+    Swal.fire('Sukses ditambahkan!', `${name} ditambahkan ke keranjang!`, 'success');
+  }
 
-  // Search functionality
-  document.getElementById('searchButton').addEventListener('click', (event) => {
-    event.preventDefault();
-    const keyword = document.getElementById('keyword').value.toLowerCase();
-    const cards = document.querySelectorAll('.card');
-
-    // Hapus pesan peringatan sebelum menambahkannya kembali
-    const noResultMessage = document.querySelector('.no-result-message');
-    if (noResultMessage) {
-      noResultMessage.remove();
-    }
-
-    let isResultFound = false;
-
-    cards.forEach((card) => {
-      const title = card.querySelector('.card-title').textContent.toLowerCase();
-      if (title.includes(keyword) || keyword === '') {
-        card.style.display = 'block';
-        isResultFound = true;
-      } else {
-        card.style.display = 'none';
-      }
+  // Handle "Add to Cart" button click for all products
+  document.querySelectorAll('.add-to-cart').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const name = button.getAttribute('data-name');
+      const price = parseFloat(button.getAttribute('data-price'));
+      handleAddToCartClick(name, price);
     });
-
-    if (!isResultFound) {
-      const noResultMessage = document.createElement('p');
-      noResultMessage.textContent = 'Produk/Barang tidak tersedia';
-      noResultMessage.classList.add('text-danger', 'no-result-message');
-      document.getElementById('listBarang').appendChild(noResultMessage);
-    }
   });
 
-  // Handle the "Clear Cart" button click
+  // Function to handle "Clear All" button click
   document.getElementById('clearCartButton').addEventListener('click', () => {
     cart.clearCart();
     updateCart();
@@ -198,24 +175,50 @@
     Swal.fire('Keranjang dikosongkan', 'Semua barang sudah dihapus dari keranjang!', 'success');
   });
 
-  // Handle the "Add to Cart" button click
-  document.querySelectorAll('.add-to-cart').forEach((button) => {
-    button.addEventListener('click', (event) => {
-      event.preventDefault();
-      const name = button.getAttribute('data-name');
-      const price = parseFloat(button.getAttribute('data-price'));
-      cart.addItem(name, price);
-      updateCart();
-      updateCartButton();
-      Swal.fire('Sukses ditambahkan!', `${name} ditambahkan ke keranjang!`, 'success');
-    });
-  });
+    // Function to handle search
+    function handleSearch() {
+      const keyword = document.getElementById('keyword').value.toLowerCase();
+      const cards = document.querySelectorAll('.card');
 
-  // Handle the cart button click to open the cart popup
-  document.getElementById('cart').addEventListener('click', () => {
-    updateCart();
-    $('#cartPopup').modal('show');
-  });
+      // Remove any previous "No Result" message
+      const noResultMessage = document.querySelector('.no-result-message');
+      if (noResultMessage) {
+        noResultMessage.remove();
+      }
+
+      let isResultFound = false;
+
+      cards.forEach((card) => {
+        const title = card.querySelector('.card-title').textContent.toLowerCase();
+        if (title.includes(keyword) || keyword === '') {
+          card.style.display = 'block';
+          isResultFound = true;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (!isResultFound) {
+        const noResultMessage = document.createElement('p');
+        noResultMessage.textContent = 'Produk/Barang tidak tersedia';
+        noResultMessage.classList.add('text-danger', 'no-result-message');
+        document.getElementById('listBarang').appendChild(noResultMessage);
+      }
+    }
+
+    // Handle the "Search" button click
+    document.getElementById('searchButton').addEventListener('click', (event) => {
+      event.preventDefault();
+      handleSearch();
+    });
+
+    // Handle "Enter" key press in the search input field
+    document.getElementById('keyword').addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleSearch();
+      }
+    });
 </script>
 </body>
 </html>
