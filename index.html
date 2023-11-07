@@ -35,7 +35,7 @@
             <br>
             <p class="card-text">Rp.60.000,00</p>
             <br>
-            <a href="#" data-name="Keyboard Logitech" data-price="60" class="add-to-cart btn btn-primary">Add to cart</a>
+            <h1 href="#" data-name="Keyboard Logitech" data-price="60" class="add-to-cart btn btn-primary">Add to cart</h1>
           </div>
         </div>
       </div>
@@ -48,7 +48,7 @@
             <br>
             <p class="card-text">Rp.300.000,00</p>
             <br>
-            <a href="#" data-name="Keyboard MSI" data-price="300" class="add-to-cart btn btn-primary">Add to cart</a>
+            <h1 href="#" data-name="Keyboard MSI" data-price="300" class="add-to-cart btn btn-primary">Add to cart</h1>
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@
             <br>
             <p class="card-text">Rp.50.000,00</p>
             <br>
-            <a href="#" data-name="Mouse Genius" data-price="50" class="add-to-cart btn btn-primary">Add to cart</a>
+            <h1 href="#" data-name="Mouse Genius" data-price="50" class="add-to-cart btn btn-primary">Add to cart</h1>
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@
             <br>
             <p class="card-text">Rp.80.000,00</p>
             <br>
-            <a href="#" data-name="Mouse Jerry" data-price="80" class="add-to-cart btn btn-primary">Add to cart</a>
+            <h1 href="#" data-name="Mouse Jerry" data-price="80" class="add-to-cart btn btn-primary">Add to cart</h1>
           </div>
         </div>
       </div>
@@ -162,14 +162,31 @@
     event.preventDefault();
     const keyword = document.getElementById('keyword').value.toLowerCase();
     const cards = document.querySelectorAll('.card');
+
+    // Hapus pesan peringatan sebelum menambahkannya kembali
+    const noResultMessage = document.querySelector('.no-result-message');
+    if (noResultMessage) {
+      noResultMessage.remove();
+    }
+
+    let isResultFound = false;
+
     cards.forEach((card) => {
       const title = card.querySelector('.card-title').textContent.toLowerCase();
       if (title.includes(keyword) || keyword === '') {
         card.style.display = 'block';
+        isResultFound = true;
       } else {
         card.style.display = 'none';
       }
     });
+
+    if (!isResultFound) {
+      const noResultMessage = document.createElement('p');
+      noResultMessage.textContent = 'Produk/Barang tidak tersedia';
+      noResultMessage.classList.add('text-danger', 'no-result-message');
+      document.getElementById('listBarang').appendChild(noResultMessage);
+    }
   });
 
   // Handle the "Clear Cart" button click

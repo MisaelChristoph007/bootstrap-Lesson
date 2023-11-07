@@ -9,6 +9,7 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+  font-family: 'Bauhaus 93';
 }
 
 * {
@@ -150,4 +151,10 @@ main {
   background-color: #f8f8f8;
   color: #888888;
   cursor: not-allowed;
+}
+
+.no-result-message {
+  text-align: center;
+  font-size: 25px;
+  width: 991px;
 }
