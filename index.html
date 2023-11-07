@@ -25,7 +25,59 @@
   </nav>
   <div class="row">
     <div class="row col-md-12 mt-2" id="listBarang">
-      <!-- Produk lainnya ... -->
+      <!-- Kerjakan dibawah ini! -->
+      <div class="col">
+        <div class="card" style="width: 20rem;">
+          <img class="card-img top" src="/assets/logitek.jpg">
+          <div class="card-block">
+            <h4 class="card-title">Keyboard Logitech</h4>
+            <p class="card-text">Keyboard yang mantap untuk kantoran</p>
+            <br>
+            <p class="card-text">Rp.60.000,00</p>
+            <br>
+            <a href="#" data-name="Keyboard Logitech" data-price="60" class="add-to-cart btn btn-primary h4" style="font-family: monospace;">Add to cart</a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card" style="width: 20rem;">
+          <img class="card-img top" src="/assets/msi.jpg" alt="Card image cap">
+          <div class="card-block">
+            <h4 class="card-title">Keyboard MSI</h4>
+            <p class="card-text">Keyboard MSI Mechanical</p>
+            <br>
+            <p class="card-text">Rp.300.000,00</p>
+            <br>
+            <a href="#" data-name="Keyboard MSI" data-price="300" class="add-to-cart btn btn-primary h4" style="font-family: monospace;">Add to cart</a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card" style="width: 20rem;">
+          <img class="card-img top" src="/assets/genius.jpeg" alt="Card image cap">
+          <div class="card-block">
+            <h4 class="card-title">Mouse Genius</h4>
+            <p class="card-text">Mouse Genius agar lebih presisi</p>
+            <br>
+            <p class="card-text">Rp.50.000,00</p>
+            <br>
+            <a href="#" data-name="Mouse Genius" data-price="50" class="add-to-cart btn btn-primary h4" style="font-family: monospace;">Add to cart</a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card" style="width: 20rem;">
+          <img class="card-img top" src="/assets/jerry.jpg" alt="Card image cap">
+          <div class="card-block">
+            <h4 class="card-title">Mouse Jerry</h4>
+            <p class="card-text">Lorem ipsum dolor sit amet</p>
+            <br>
+            <p class="card-text">Rp.80.000,00</p>
+            <br>
+            <a href="#" data-name="Mouse Jerry" data-price="80" class="add-to-cart btn btn-primary h4" style="font-family: monospace;">Add to cart</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -57,8 +109,6 @@
   integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
   crossorigin="anonymous"></script>
 <script>
-  let previousCartItemCount = 0; // Variabel untuk menyimpan jumlah item keranjang sebelumnya
-
   const cart = {
     items: [],
 
@@ -97,9 +147,6 @@
     } else {
       cartButton.innerHTML = `<i class="fas fa-shopping-cart"></i><span id="cartItemCount"> (${cartItemCount})</span>`;
     }
-
-    // Update previousCartItemCount setelah tombol diperbarui
-    previousCartItemCount = cartItemCount;
   }
 
   // Handle the "Order now" button click
@@ -131,7 +178,7 @@
         card.style.display = 'block';
         isResultFound = true;
       } else {
-        card.style display = 'none';
+        card.style.display = 'none';
       }
     });
 
@@ -148,9 +195,10 @@
     cart.clearCart();
     updateCart();
     updateCartButton();
-    Swal.fire('Cart Cleared', 'Your cart has been cleared.', 'success');
+    Swal.fire('Keranjang dikosongkan', 'Semua barang sudah dihapus dari keranjang!', 'success');
   });
 
+  // Handle the "Add to Cart" button click
   document.querySelectorAll('.add-to-cart').forEach((button) => {
     button.addEventListener('click', (event) => {
       event.preventDefault();
